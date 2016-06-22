@@ -1,38 +1,46 @@
 /* eslint-disable new-cap */
 
 import express from 'express';
+import Priority from '../models/priority';
+import Category from '../models/category';
+import Task from '../models/task';
+import ViewTask from '../models/view-task';
+
 const router = module.exports = express.Router();
 
-// task list
 router.get('/', (req, res) => {
-  res.render('tasks/index');
+  Task.find((err, tasks) => {
+    const priorities = Priority.find();
+    const viewTasks = tasks.map(t => new ViewTask(t, priorities));
+    res.render('tasks/index', { viewTasks });
+  });
 });
 
-// create a new task
 router.get('/new', (req, res) => {
-  res.render('tasks/new');
+  const priorities = Priority.find();
+  const categories = Category.find();
+  res.render('tasks/new', { priorities, categories });
 });
 
-// create a task and redirect to tasks
 router.post('/', (req, res) => {
-  res.redirect('/tasks');
+  const task = new Task(req.body);
+  task.save(() => {
+    res.redirect('/tasks');
+  });
 });
 
-// complete the task (mark completed)
 router.post('/:id/complete', (req, res) => {
   res.redirect('/tasks');
 });
 
-// delete a task
 router.post('/:id/delete', (req, res) => {
   res.redirect('/tasks');
 });
 
 router.get('/:id/edit', (req, res) => {
-  res.render('/tasks/new');
+  res.render('tasks/new');
 });
 
-// update task
 router.post('/:id', (req, res) => {
   res.redirect('/tasks');
 });
