@@ -5,6 +5,7 @@ block content
   table.table.table-striped
     thead
       tr
+        th
         th Name
         th Due
         th Priority
@@ -14,6 +15,11 @@ block content
     tbody
       each task in viewTasks
         tr(style='background-color:' + task.priority.color)
+          td
+            form(action='/tasks/' + task.id + '/complete', method='post')
+              button(type='submit') Complete
+            form(action='/tasks/' + task.id + '/delete', method='post')
+              button(type='submit') Delete
           td= task.name
           td= task.due
           td= task.priority.name

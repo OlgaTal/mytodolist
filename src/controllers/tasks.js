@@ -30,11 +30,15 @@ router.post('/', (req, res) => {
 });
 
 router.post('/:id/complete', (req, res) => {
-  res.redirect('/tasks');
+  Task.findByIdAndUpdate(req.params.id, { isComplete: true }, (err, result) => {
+    res.redirect('/tasks');
+  });
 });
 
 router.post('/:id/delete', (req, res) => {
-  res.redirect('/tasks');
+  Task.findByIdAndRemove(req.params.id, (err, result) => {
+    res.redirect('/tasks');
+  });
 });
 
 router.get('/:id/edit', (req, res) => {

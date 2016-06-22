@@ -1,4 +1,5 @@
 function ViewTask(task, priorities) {
+  this.id = task._id; // this is from DB
   this.name = task.name;
   this.due = task.due.toLocaleDateString();
   this.priority = priorities.find(p => p.value === task.priority);
